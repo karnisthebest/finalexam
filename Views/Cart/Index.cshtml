@@ -1,0 +1,165 @@
+ <!-- 
+     step27: include model at the top,
+     by introducting the IEnumerable of CartView we can iterate through the car object
+ -->
+ @model IEnumerable<test.Models.CartView>
+     
+     <h2>Shopping Cart</h2>
+
+     <a href="/cart/create">new cart</a>     <!-- create a link to open view>cart>create.cshtml-->
+     <hr>
+     <div class="container">                 <!-- create a container to hold chart display -->
+         <div id="chart1"></div>
+     </div>
+     <div class="container">                 <!-- create a container to hold date time picker div-->   
+         <div class="row">
+             <div class="col-4">
+                 Start Date: <input id="startDate" width="200" />
+             </div>
+             <div class="col-4">
+                 End Date: <input id="endDate" width="200" />
+             </div>
+             <div class="col-3">
+                 <br>
+                 <button class="btn btn-warning btn-block" id="cmd_select_date">select</button>
+             </div>
+         </div>
+         <br>
+     </div>
+     <table class="table">                  <!-- create a table tab -->
+         <tr>
+             <td>cart Id</td>
+             <td>Date</td>
+             <td>Total</td>
+             <td></td>
+         </tr>
+
+         <!-- loop through item in the Model , the Model contains a list of cartView objects --> 
+         @foreach(var item in @Model){      
+         <tr>
+             <td>@item.Id</td>
+             <td>@item.date</td>
+             <td>@item.total</td>
+             <td><a asp-action="edit" asp-route-id="@item.Id">view</a></td>
+         </tr>
+         }
+
+     </table>
+
+     @section Scripts{
+     <script>
+         $(document).ready(cb);   //register jquery startup event
+
+ 
+         var cmd_select_date = $('#cmd_select_date');   //declare reference to the select_date button
+
+         function cb() {
+             setup_date_pickers(); //setup date_picker  //require special libs 
+             //goto step 28 for this  , lookup Shared>_Layout.cshtml
+
+             cmd_select_date.click(cmd_select_date_clicked); //register select_date button click event
+
+             //setup apex chart 
+             var x_data = '@ViewBag.x_data'.split(',');     //obtain ViewBag data 
+             var y_data = '@ViewBag.y_data'.split(',');     //obtain ViewBag data
+
+             option = setup_graph(x_data, y_data);          //setup graph and return option object
+
+             //create a chart object and and attach the display to chart1 div tag
+             var chart = new ApexCharts(
+                 document.querySelector("#chart1"),
+                 option
+             );
+             chart.render();    //ask chart to render itself
+         } //ef
+
+         function cmd_select_date_clicked() {
+             var start_date = $('#startDate').val();
+             var end_date = $('#endDate').val();
+             var url = "/cart/index";
+             url += "?d1=" + start_date;
+             url += "&d2=" + end_date;
+             window.location.href = url;
+
+         }
+
+         function setup_date_pickers() {
+             var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+             $('#startDate').datepicker({
+                 uiLibrary: 'bootstrap4',
+                 iconsLibrary: 'fontawesome',
+                 //minDate: today,
+                 maxDate: function () {
+                     return $('#endDate').val();
+                 }
+             });
+             $('#endDate').datepicker({
+                 uiLibrary: 'bootstrap4',
+                 iconsLibrary: 'fontawesome',
+                 minDate: function () {
+                     return $('#startDate').val();
+                 }
+             });
+         } //ef
+
+
+         function setup_graph(x_data, y_data) {
+             var option = {
+                 chart: {
+                     height: 350,
+
+                     type: 'line',
+                     zoom: {
+                         enabled: false
+                     }
+                 },
+                 dataLabels: {
+                     enabled: false
+                 },
+                 stroke: {
+                     curve: 'straight'
+                 },
+                 series: [{
+                     name: "Desktops",
+                     data: y_data
+                 }],
+                 title: {
+                     text: 'Product Trends by Month',
+                     align: 'left'
+                 },
+                 grid: {
+                     row: {
+                         colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                         opacity: 0.5
+                     },
+                 },
+                 xaxis: {
+                     type: "datetime",
+                     categories: x_data,
+                 },
+                 responsive: [{
+                     breakpoint: 300,
+                     options: {
+                         legend: {
+                             position: "bottom"
+                         }
+                     }
+                 }],
+                 markers: {
+                     size: 5,
+                     discrete: [{
+                         seriesIndex: 0,
+                         dataPointIndex: 1,
+                         fillColor: "#0A0",
+                         strokeColor: "#FFF",
+                         size: 7
+                     }]
+                 }
+             }; //end option
+
+             return option;
+
+
+         } //ef
+     </script>
+     }

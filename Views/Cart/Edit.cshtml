@@ -1,0 +1,37 @@
+@model test.Models.Cart
+<h3>Cart Item Detail</h3>
+<div>
+   <h5> cart id: @Model.cartId</h5>
+</div>
+<div>
+    <h5>created date : @Model.createdDate</h5>
+</div>
+<table class="table">
+    <tr>
+        <td>id</td>
+        <td>price</td>
+        <td>qty</td>
+        <td>total</td>
+    </tr>
+    @{
+      double gtotal = 0;
+      foreach(var item in @Model.cartItems){
+        double total = item.productPrice*item.productQty;
+        gtotal = gtotal + total;
+        <tr>
+            <td>@item.productId</td>
+            <td>@item.productPrice</td>
+            <td>@item.productQty</td>
+            <td>@total</td>
+        </tr>
+    
+      }//end foreach
+        <tr>
+            <td>total:</td>
+            <td></td>
+            <td></td>
+            <td>@gtotal</td>
+        </tr>
+      }
+</table>
+<a asp-action="index">Go to Cart</a>

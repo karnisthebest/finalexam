@@ -1,0 +1,191 @@
+ <!-- step 29-->
+<h4>Cart</h4>
+<hr />
+ 
+<div class="row">
+    <div class="col-md-6">   
+        <div class="form-group">
+            <label class="control-label">product </label>
+            <select id="product_names" />
+        </div>
+        <div class="form-group">
+            price <input  id="txt_price" />
+        </div>
+        <div class="form-group">
+            <input id="txt_qty"></input>
+            <button id="cmd_inc">+</button>
+            <button id="cmd_dec">-</button>
+        </div>
+        <div class="form-group">
+            <button id="cmd_add">add</button>
+        </div>
+        
+        <table class="table" id ="table1">
+            <tr>   
+                <th>name</th>
+                <th>qty</th>
+                <th>price</th>
+                <th>total</th>
+                <th>operation</th>
+            </tr>
+        </table>
+        <button id="cmd_confirm">confirm</button>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        var list =[];
+        var cart = [];
+        var cmb_product_names   = $('#product_names');
+        var txt_qty             = $('#txt_qty');
+        var txt_price           = $('#txt_price');
+        var tbl_table1          = $('#table1');
+        var cmd_inc             = $('#cmd_inc');
+        var cmd_dec             = $('#cmd_dec');
+        var cmd_add             = $('#cmd_add');
+        var cmd_confirm         = $('#cmd_confirm');
+       
+        $(document).ready(cb); //register callback function to service document ready event
+       
+      
+        function cb(){
+            
+            //register combobox event
+            cmb_product_names.change(cb_change);
+            cmd_inc.click(cb_inc_clicked);
+            cmd_dec.click(cb_dec_clicked);
+            cmd_add.click(cb_add_clicked);
+            cmd_confirm.click(cb_confirm_clicked);
+               
+            $.get("/product/products",product_data_arrived);
+
+          
+        }//end cb
+
+        function cb_confirm_clicked(){
+        
+            var result = [];
+            for(var i = 0;i< cart.length;i++){
+                result.push({
+                    productId: cart[i].id,
+                    productQty: cart[i].qty,
+                    productPrice: cart[i].price
+                });
+            }
+
+            console.log(result);
+            //step30: post operation
+            option ={
+                    // dataType: "json",
+                    data: {items:result},
+                    url:'/cart/addcart',
+                    success: addcart_done,
+                    error: function(err){console.log('error',err);}
+            };
+            $.post(option);
+        }
+        //step33: data return from the server side
+        function addcart_done(data){
+             window.location.replace(data.newUrl); //redirect to Index Action
+        }
+
+        function cb_removes_clicked(obj){
+          
+             
+                //console.log($(this).val());
+                var product_id = $(obj).attr('data-id');
+                cart = cart.filter((a)=>{
+                    return a.id != product_id
+                });
+                console.log(cart);
+                updateTable();
+        }
+
+        function cb_inc_clicked(){
+ 
+            var value = parseInt(txt_qty.val());
+            value++;
+            txt_qty.val(value.toString());
+        }
+        function cb_dec_clicked(){
+          
+            var value = parseInt(txt_qty.val());
+            value--;
+            if(value ==0) { value =1;}
+            txt_qty.val(value.toString());
+        }
+
+        function cb_add_clicked(){
+            var product_id = cmb_product_names.val(); //get selection value
+            var price = parseFloat(txt_price.val());
+            var qty   = parseInt(txt_qty.val());
+           
+             var found = list.find((a)=>{
+                return a.productId == product_id
+            });
+            var row = {
+                id          : product_id,
+                name        : found.productName,
+                price       : price,
+                qty         : qty,
+                total       :price*qty
+            };
+            cart.push(row);
+            updateTable();
+            
+
+        }
+        function tr(data){return '<tr>'+ data + '</tr>';}
+        function td(data){return '<td>'+ data + '</td>';}
+        function button(id,data){return '<button  onclick="cb_removes_clicked(this)" data-id="'+id+'">'+ data + '</button>';}
+    
+        function updateTable(){
+            //remove all rows except the header row
+            tbl_table1.find("tr:gt(0)").remove();
+            var total = 0;
+            for(var i = 0; i< cart.length;i++){
+                var row = tr(td(cart[i].name)+td(cart[i].qty)+td(cart[i].price)+td(cart[i].total)+td(button(cart[i].id,"remove")));
+                tbl_table1.append(row);
+                total += cart[i].price* cart[i].qty;
+            }
+            var summary = tr(td('total')+td('')+td('')+td(total));
+            tbl_table1.append(summary);
+
+        }
+        function product_data_arrived(data){
+            list = data;
+            $.each(data,function(key, item) 
+            {
+                cmb_product_names.append('<option value=' + item.productId + '>' + item.productName + '</option>');
+            });
+            txt_price.val(list[0].productPrice);
+            txt_qty.val("1");
+          
+         
+        }//ef
+
+        function cb_change(){
+        
+            //get selection value
+            var product_id = cmb_product_names.val();  
+
+            //search object in the list by product_id
+            var found = list.find((a)=>{
+                return a.productId == product_id
+            });
+  
+            //update product price in txt price textbox
+            if(found != null){
+                txt_price.val(found.productPrice);
+                 
+             }
+            
+        }
+
+        
+    </script>
+}
+ 
