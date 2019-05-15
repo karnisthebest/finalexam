@@ -1,0 +1,34 @@
+@model IEnumerable<test.Models.CheckView>
+
+
+
+    <h1>cars has checked-in multiple time per day </h1> 
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                   checkoutLicensePlate
+                </th>
+                <th>
+                    count
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.licensePlate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.count)
+                </td>
+                
+            </tr>
+    }
+        </tbody>
+    </table>
+    
+    

@@ -22,6 +22,11 @@ namespace test.Data{
         public DbSet<Cart> carts {get;set;}
         public DbSet<CartItem> cartItems {get;set;}
 
+        public DbSet<CarCheckin> CarCheckins {get;set;}
+        public DbSet<CarCheckOut> CarCheckOuts {get;set;}
+
+
+
  }//ec
 
 }//en

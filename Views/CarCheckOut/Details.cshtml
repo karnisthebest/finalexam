@@ -1,0 +1,26 @@
+@model test.Models.CarCheckOut
+
+
+<div>
+    <h4>CarCheckOut</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.checkoutLicensePlate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.checkoutLicensePlate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.checkoutTime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.checkoutTime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.checkoutId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -39,7 +39,7 @@ namespace test{
         //the value of start_date and stop_date will be null
 
         [HttpGet]
-        public async Task<IActionResult> Index(string d1, string d2){
+        public IActionResult Index(string d1, string d2){
            
 
             //step18: perform a absolute query from carts table

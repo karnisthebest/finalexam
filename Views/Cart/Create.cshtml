@@ -157,6 +157,7 @@
         }
         function product_data_arrived(data){
             list = data;
+            console.log(data, "hello data")
             $.each(data,function(key, item) 
             {
                 cmb_product_names.append('<option value=' + item.productId + '>' + item.productName + '</option>');

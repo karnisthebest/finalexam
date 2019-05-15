@@ -14,8 +14,36 @@ namespace test.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("test.Models.CarCheckOut", b =>
+                {
+                    b.Property<int>("checkoutId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("checkoutLicensePlate");
+
+                    b.Property<DateTime>("checkoutTime");
+
+                    b.HasKey("checkoutId");
+
+                    b.ToTable("CarCheckOuts");
+                });
+
+            modelBuilder.Entity("test.Models.CarCheckin", b =>
+                {
+                    b.Property<int>("checkinId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("checkinLicensePlate");
+
+                    b.Property<DateTime>("checkinTime");
+
+                    b.HasKey("checkinId");
+
+                    b.ToTable("CarCheckins");
+                });
 
             modelBuilder.Entity("test.Models.Cart", b =>
                 {
@@ -56,8 +84,7 @@ namespace test.Migrations
 
                     b.Property<DateTime>("createdDate");
 
-                    b.Property<string>("productName")
-                        .HasMaxLength(5);
+                    b.Property<string>("productName");
 
                     b.Property<double>("productPrice");
 

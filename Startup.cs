@@ -18,7 +18,7 @@ namespace test
     public class Startup
     {
         //step1: create connection string
-        private const string V = "Server=localhost;Database=test;User=root;Password=root;";
+        private const string V = "Server=localhost;Database=shoppingcart;User=root;Password=;";
 
         public Startup(IConfiguration configuration)
         {
