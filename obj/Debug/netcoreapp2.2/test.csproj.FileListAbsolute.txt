@@ -87,3 +87,4 @@ c:\Users\karn_\Documents\Last semester\Web application\test\obj\Debug\netcoreapp
 c:\Users\karn_\Documents\Last semester\Web application\test\obj\Debug\netcoreapp2.2\Razor\Views\Results\Index.g.cshtml.cs
 c:\Users\karn_\Documents\Last semester\Web application\test\obj\Debug\netcoreapp2.2\Razor\Views\Results\multiple.g.cshtml.cs
 c:\Users\karn_\Documents\Last semester\Web application\test\obj\Debug\netcoreapp2.2\Razor\Views\Results\before.g.cshtml.cs
+c:\Users\karn_\Documents\Last semester\Web application\test\obj\Debug\netcoreapp2.2\Razor\Views\Results\pie.g.cshtml.cs

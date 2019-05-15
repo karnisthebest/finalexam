@@ -92,38 +92,51 @@ namespace test.Controllers
 
             
 
-            //convert checkin into hour and minutes that has same dd mm yy as myTime
+            //convert checkout into hour and minutes that has same dd mm yy as myTime
             var checkoutTimes = getCheckout
                                 .Select(x => new CheckView {
-                                    licensePlate = x.checkoutLicensePlate,
+                                    licensePlate = x.checkoutLicensePlate,  
                                     hour = new DateTime(2008,4,1, x.checkoutTime.Hour, x.checkoutTime.Minute, 0),
                                 });
 
-            // get checkin less than 13:30
+            // get checkout less than 13:30
             var checkoutBefore = checkoutTimes
                                     .Where(x => x.hour < myTime)
                                     .ToList();
                                     
-            // count total checkin before 13:30
+            // count total checkout before 13:30
             var checkoutCount = checkoutBefore.Count();
 
             var parkingSpace = 20 - (checkinCount - checkoutCount);
 
            
             ViewData["ParkingSpace"] = parkingSpace;
-           
-
-          
 
             return View();
 
             
-            // if(d1 != null && d2 != null){
-            //     DateTime date1 = Convert.ToDateTime(d1);
-            //     DateTime date2 = Convert.ToDateTime(d2);
-            //     set1 = set1.Where(x => x.createdDate >= date1 && x.createdDate <= date2);
-            // }
 
+        }
+
+        public IActionResult piedata()
+        {
+
+            var checkinCount = _context.CarCheckins
+                                .Select(x => x)
+                                .Count();
+
+            var checkoutCount = _context.CarCheckOuts
+                                .Select(x => x)
+                                .Count();
+            int[] PieChartArray = {checkinCount, checkoutCount};
+
+
+            return Json(PieChartArray);
+        }
+
+        public IActionResult pie()
+        {
+            return View();
         }
 
         
